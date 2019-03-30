@@ -1,9 +1,12 @@
 require("dotenv").config();
+
 var axios = require("axios");
+
 var fs = require("fs");
-var spotify = require('node-spotify-api');
+
+require('node-spotify-api');
 var keys = require("./keys.js");
-var spotify = new Spotify(keys.spotify);
+// var spotify = new Spotify(keys.spotify);
 
 var movieName = "";
 var artistName = "";
@@ -11,74 +14,107 @@ var bitURL = "";
 var omdbURL = "";
 
 function concertThis(txt) {
-    console.log(txt);
-    bitURL = "https://rest.bandsintown.com/artists/" + txt + "/events?app_id=codingbootcamp";
+    if (txt) {
+        artistName = txt;
+    } else if (process.argv[3]) {
+        for (var i = 3; i < process.argv.length; i++) {
+            if (i == 3) {
+                artistName = process.argv[i];
+            } else if (i > 3) {
+                artistName += "+" + process.argv[i];
+            }
+        }
+    } else {
+        console.log("You didn't enter band/artist name.");
+        return;
+    }
+    bitURL = "https://rest.bandsintown.com/artists/" + artistName + "/events?app_id=codingbootcamp";
+    axios.get(bitURL).then(
+        function (response) {
+            console.log("\n");
+            if (response.data.length > 0) {
+                response.data.forEach(function (obj) {
+                    console.log(obj.venue.name);
+                    console.log(obj.venue.city + ", " + obj.venue.region);
+                    console.log(obj.datetime + "\n");
+                });
+            } else {
+                console.log("No shows found for the band/artist: " + artistName);
+            }
+        }
+    )
 }
 
 function spotifyThis(txt) {
-    console.log(txt);
+
     spotify.search({ type: 'track', query: txt }, function (err, data) {
         if (err) {
             return console.log('Error occurred: ' + err);
         }
-        console.log(data);
     });
 }
 
 function movieThis(txt) {
-    omdbURL = "http://www.omdbapi.com/?t=" + txt + "&y=&plot=short&apikey=trilogy";
+    if (txt) {
+        movieName = txt;
+    } else if (process.argv[3]) {
+        for (var i = 3; i < process.argv.length; i++) {
+            if (i == 3) {
+                movieName = process.argv[i];
+            } else if (i > 3) {
+                movieName += "+" + process.argv[i];
+            }
+        }
+    } else {
+        movieName = "Mr. Nobody";
+        console.log("You didn't enter a movie name, so we're showing you info about: " + movieName);
+    }
+    omdbURL = "http://www.omdbapi.com/?t=" + movieName + "&apikey=trilogy";
     axios.get(omdbURL).then(
         function (response) {
+            console.log("\n");
+            if (response.data.Response == "True") {
+                console.log("Title: " + response.data.Title);
             console.log("Year of release is: " + response.data.Year);
+            console.log("IMDB rating: " + response.data.Ratings[0].Value);
+            console.log("Rotten Tomatoes rating: " + response.data.Ratings[1].Value);
+            console.log("Country of production: " + response.data.Country);
+            console.log("Language: " + response.data.Language);
+            console.log("Movie plot: " + response.data.Plot);
+            console.log("Actors: " + response.data.Actors);
+            } else {
+                console.log("No movie was found matching your search criteria (" + movieName + ")");
+            }
+            
         }
-    );
-    /*
-    * Title of the movie.
-    * Year the movie came out.
-    * IMDB Rating of the movie.
-    * Rotten Tomatoes Rating of the movie.
-    * Country where the movie was produced.
-    * Language of the movie.
-    * Plot of the movie.
-    * Actors in the movie.
-    */
+    )
 }
 
 if (process.argv[2] === "concert-this") {
-    for (var i = 2; i < process.argv.length; i++) {
-        if (i == 2) {
-            artistName = process.argv[i];
-        } else if (i > 2) {
-            artistName += "+" + process.argv[i];
-        }
-    }
-    concertThis(artistName);
+    concertThis();
 } else if (process.argv[2] === "spotify-this-song") {
-    console.log(process.argv[2]);
-
+    spotifyThis();
 } else if (process.argv[2] === "movie-this") {
-    for (var i = 2; i < process.argv.length; i++) {
-        if (i == 2) {
-            movieName = process.argv[i];
-        } else if (i > 2) {
-            movieName += "+" + process.argv[i];
-        }
-    }
-    movieThis(movieName);
+    movieThis();
 } else if (process.argv[2] === "do-what-it-says") {
     fs.readFile("random.txt", "utf8", function (error, data) {
         if (error) {
             return console.log(error);
         }
         var dataArray = data.split(",");
+        var formattedString = dataArray[1].slice(1, dataArray[1].length-1).replace(" ", "+");
         if (dataArray[0] === "concert-this") {
-            concertThis(dataArray[1]);
+            concertThis(formattedString);
         } else if (dataArray[0] === "spotify-this-song") {
-            spotifyThis(dataArray[1]);
+            spotifyThis(formattedString);
         } else if (dataArray[0] === "movie-this") {
-            movieThis(dataArray[1]);
+            movieThis(formattedString);
         }
     });
 } else {
     console.log("Your search type is not supported. Please use only 'concert-this', 'spotify-this-song', 'movie-this' or 'do-what-it-says' as the first parameter");
 }
+
+// spotify-this-song,"I Want it That Way"
+// movie-this,"Blues Brothers"
+// concert-this,"Drake"
