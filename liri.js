@@ -4,20 +4,22 @@ var axios = require("axios");
 
 var fs = require("fs");
 
-require('node-spotify-api');
+var Spotify = require('node-spotify-api');
 var keys = require("./keys.js");
-// var spotify = new Spotify(keys.spotify);
+var spotify = new Spotify(keys.spotify);
 
 var movieName = "";
 var artistName = "";
 var bitURL = "";
 var omdbURL = "";
+var dataArray = [];
+var formattedString = "";
 
 function concertThis(txt) {
     if (txt) {
         artistName = txt;
     } else if (process.argv[3]) {
-        for (var i = 3; i < process.argv.length; i++) {
+        for (let i = 3; i < process.argv.length; i++) {
             if (i == 3) {
                 artistName = process.argv[i];
             } else if (i > 3) {
@@ -33,6 +35,7 @@ function concertThis(txt) {
         function (response) {
             console.log("\n");
             if (response.data.length > 0) {
+                console.log("Showing info for: " + artistName + " concerts.\n----------------------------------");
                 response.data.forEach(function (obj) {
                     console.log(obj.venue.name);
                     console.log(obj.venue.city + ", " + obj.venue.region);
@@ -58,7 +61,7 @@ function movieThis(txt) {
     if (txt) {
         movieName = txt;
     } else if (process.argv[3]) {
-        for (var i = 3; i < process.argv.length; i++) {
+        for (let i = 3; i < process.argv.length; i++) {
             if (i == 3) {
                 movieName = process.argv[i];
             } else if (i > 3) {
@@ -101,8 +104,8 @@ if (process.argv[2] === "concert-this") {
         if (error) {
             return console.log(error);
         }
-        var dataArray = data.split(",");
-        var formattedString = dataArray[1].slice(1, dataArray[1].length-1).replace(" ", "+");
+        dataArray = data.split(",");
+        formattedString = dataArray[1].slice(1, dataArray[1].length-1).replace(" ", "+");
         if (dataArray[0] === "concert-this") {
             concertThis(formattedString);
         } else if (dataArray[0] === "spotify-this-song") {
