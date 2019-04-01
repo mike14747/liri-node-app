@@ -2,7 +2,7 @@
 
 * The user will input 'node liri' into the terminal... plus one of these 4 possible second parameters:
   * concert-this
-    * this parameter requires an additional secondary artist/band parameter
+    * this parameter requires an additional secondary artist/band name parameter
     * sample of this completed input would be: 'node liri concert-this grand funk'
   * movie-this
     * this parameter accepts an additional secondary movie name parameter
@@ -26,4 +26,27 @@
     * in the case of 'do-what-it-says', no check for a secondary parameter will be made
   * Secondary parmeters can be multiple words
     * if they are multiple words, they will be concatenated into a single string... with '+' signs replacing the spaces
-    
+
+* Assuming there are no errors in the user input, the following will be displayed:
+  * a message stating no results found for the user's input
+  * 'concert-this' will show all available concerts from BandsInTown for the artist/band name with this information:
+    * venue
+    * city, state/country
+    * date (formatted using moment.js)
+  * 'movie-this' will show the first movie match from the OMDB database with this information:
+    * Title
+    * Year of release
+    * IMDB rating
+    * Rotten Tomatoes rating
+    * Country of production
+    * Language
+    * Movie plot
+    * Actors
+  * 'spotify-this-song' will show the first 5 song name matches from Spotify with the following information:
+    * Artist
+    * Song Name
+    * Spotify preview link
+    * Album Name
+  * 'do-what-t-says' will do one of the previous 3 tasks... depending upon what the contents of 'random.txt' are
+
+* A log file (log.txt) is included and it logs everything that gets console logged to the terminal
