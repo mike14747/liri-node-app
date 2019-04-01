@@ -50,3 +50,5 @@
   * 'do-what-t-says' will do one of the previous 3 tasks... depending upon what the contents of 'random.txt' are
 
 * A log file (log.txt) is included and it logs everything that gets console logged to the terminal
+
+* 'concert-this' and 'movie-this' use 'axios' to make their API calls, while 'spotify-this-song' uses 'node-spotify-api'
