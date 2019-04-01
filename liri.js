@@ -18,6 +18,7 @@ var formattedString = "";
 var lim = 0;
 var formattedDate = "";
 var secLoc = "";
+var defSongName = "";
 
 function concertThis(txt) {
     if (txt || process.argv[3]) {
@@ -33,30 +34,34 @@ function concertThis(txt) {
             }
         }
         bitURL = "https://rest.bandsintown.com/artists/" + artistName + "/events?app_id=codingbootcamp";
-        axios.get(bitURL).then(
-            function (response) {
-                console.log("\n");
-                if (response.data[0].venue) {
-                    console.log("Showing BandsInTown info for: '" + artistName.replace("+", " ") + "' concerts.\n");
-                    response.data.forEach(obj => {
-                        console.log("----------------------------------\n");
-                        console.log(obj.venue.name);
-                        if (obj.venue.region == "") {
-                            secLoc = obj.venue.country;
-                        } else {
-                            secLoc = obj.venue.region;
-                        }
-                        console.log(obj.venue.city + ", " + secLoc);
-                        formattedDate = moment(obj.datetime, "YYYY-MM-DDThh:mm:ss").format("MM/DD/YYYY");
-                        console.log(formattedDate + "\n");
-                    });
-                } else {
-                    console.log("No BandsInTown shows found for the band/artist: '" + artistName.replace("+", " ") + "'\n");
+        axios.get(bitURL)
+            .then(
+                function (response) {
+                    console.log("\n");
+                    if (response.status === 200 && response.data[0] && response.data[0].venue) {
+                        console.log("Showing BandsInTown info for: '" + artistName.replace(/\+/g, " ") + "' concerts.\n");
+                        response.data.forEach(obj => {
+                            console.log("----------------------------------\n");
+                            console.log(obj.venue.name);
+                            if (obj.venue.region == "") {
+                                secLoc = obj.venue.country;
+                            } else {
+                                secLoc = obj.venue.region;
+                            }
+                            console.log(obj.venue.city + ", " + secLoc);
+                            formattedDate = moment(obj.datetime, "YYYY-MM-DDThh:mm:ss").format("MM/DD/YYYY");
+                            console.log(formattedDate + "\n");
+                        });
+                    } else {
+                        console.log("No BandsInTown shows found for the band/artist: '" + artistName.replace(/\+/g, " ") + "'\n");
+                    }
                 }
-            }
-        )
+            )
+            .catch(function (error) {
+                console.log("\nAn error occurred... please try your search again.");
+            });
     } else {
-        console.log("\n\nYou didn't enter band/artist name.");
+        console.log("\n\nYou didn't enter band/artist name.\n");
         return;
     }
 }
@@ -80,7 +85,7 @@ function spotifyThis(txt) {
             .then(function (response) {
                 console.log("\n");
                 if (response.tracks.total > 0) {
-                    console.log("\nShowing Spotify info for (up to 5) matches for: '" + songName.replace("+", " ") + "'.\n");
+                    console.log("\nShowing Spotify info for (up to 5) matches for: '" + songName.replace(/\+/g, " ") + "'.\n");
                     response.tracks.items.forEach(obj => {
                         console.log("----------------------------------\n");
                         console.log("Artist: " + obj.artists[0].name);
@@ -89,7 +94,7 @@ function spotifyThis(txt) {
                         console.log("Album Name: " + obj.album.name + "\n");
                     });
                 } else {
-                    console.log("No Spotify results found for the song: '" + songName.replace("+", " ") + "'\n");
+                    console.log("No Spotify results found for the song: '" + songName.replace(/\+/g, " ") + "'\n");
                 }
             })
             .catch(function (err) {
@@ -128,14 +133,14 @@ function movieThis(txt) {
         }
     } else {
         movieName = "Mr.+Nobody";
-        console.log("\nYou didn't enter a movie name, so we're showing you info about: '" + movieName.replace("+", " ") + "'");
+        console.log("\n\nYou didn't enter a movie name, so we're showing you info about: '" + movieName.replace(/\+/g, " ") + "'");
     }
     omdbURL = "http://www.omdbapi.com/?t=" + movieName + "&apikey=trilogy";
     axios.get(omdbURL).then(
         function (response) {
             console.log("\n");
             if (response.data.Response == "True") {
-                console.log("Showing the first OMDB match for: '" + movieName.replace("+", " ") + "'.\n\n----------------------------------\n");
+                console.log("Showing the first OMDB match for: '" + movieName.replace(/\+/g, " ") + "'.\n\n----------------------------------\n");
                 console.log("Title: " + response.data.Title + "\n");
                 console.log("Year of release is: " + response.data.Year + "\n");
                 console.log("IMDB rating: " + response.data.Ratings[0].Value + "\n");
@@ -145,7 +150,7 @@ function movieThis(txt) {
                 console.log("Movie plot: " + response.data.Plot + "\n");
                 console.log("Actors: " + response.data.Actors + "\n");
             } else {
-                console.log("No movie was found at OMDB matching your search criteria: '" + movieName.replace("+", " ") + "'\n");
+                console.log("No movie was found at OMDB matching your search criteria: '" + movieName.replace(/\+/g, " ") + "'\n");
             }
         }
     )
@@ -163,7 +168,7 @@ if (process.argv[2] === "concert-this") {
             return console.log(error);
         }
         dataArray = data.split(",");
-        formattedString = dataArray[1].slice(1, dataArray[1].length - 1).replace(" ", "+");
+        formattedString = dataArray[1].slice(1, dataArray[1].length - 1).replace(/ /g, "+");
         if (dataArray[0] === "concert-this") {
             concertThis(formattedString);
         } else if (dataArray[0] === "spotify-this-song") {
@@ -175,7 +180,3 @@ if (process.argv[2] === "concert-this") {
 } else {
     console.log("\nYour search type is not supported.\n\nPlease use only 'concert-this', 'spotify-this-song', 'movie-this' or 'do-what-it-says' as the first parameter");
 }
-
-// spotify-this-song,"I Want it That Way"
-// movie-this,"Blues Brothers"
-// concert-this,"Fleetwood Mac"
