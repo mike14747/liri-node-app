@@ -1,19 +1,29 @@
 # liri-node-app
 
-* The user will input 'node liri' plus one of these 4 possible second parameters:
+* The user will input 'node liri' into the terminal... plus one of these 4 possible second parameters:
   * concert-this
-    * this parameter requires an additional artist/band parameter
+    * this parameter requires an additional secondary artist/band parameter
     * sample of this completed input would be: 'node liri concert-this grand funk'
   * movie-this
-    * this parameter requires an additional movie name parameter
-    * without this additional parameter, results for the movie 'Mr. Nobody' will be displayed
+    * this parameter accepts an additional secondary movie name parameter
+    * without this additional secondary parameter, results for the movie 'Mr. Nobody' will be displayed
     * sample of this completed input would be: 'node liri movie-this blues brothers'
   * spotify-this-song
-    * this parameter requires an additional song name parameter
-    * without this additional parameter, results for the song 'The Sign' by 'Ace of Bass' will be displayed
+    * this parameter accepts an additional secondary song name parameter
+    * without this additional secondary parameter, results for the song 'The Sign' by 'Ace of Bass' will be displayed
     * sample of this completed input would be: 'node liri spotify-this-song carouselambra'
   * do-what-it-says
     * this parameter cause liri to ignore any additional parameters
-    * it will read the file 'randon.txt'... whose contents include one of the first 3 parameters, plus an additional one
+    * this full inout looks like: 'node liri do-what-it-says'
+    * this will read the file 'random.txt'... whose contents include one of the first 3 parameters, plus one of the additional ones
 
-* 
+* Upon entering this into the terminal, the following sequence of events will occur:
+  * User validation will check that one of the 4 approved parameters has been entered
+    * if one of the approved parameters hasn't been entered, an error message will be displayed listing the acceptable parameters
+  * In the case of the first 3 acceptable parameters, a check for the secondary parameters will be made
+    * in the cases of 'movie-this' and 'spotify-this-song', an secondary parameter isn't required and it will default to the ones listed above if ommitted.
+    * in the case of 'concert-this', if no secondary parameter is provided, an error will be displayed
+    * in the case of 'do-what-it-says', no check for a secondary parameter will be made
+  * Secondary parmeters can be multiple words
+    * if they are multiple words, they will be concatenated into a single string... with '+' signs replacing the spaces
+    
