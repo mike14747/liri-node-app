@@ -1,6 +1,6 @@
 # liri-node-app
 
-* The user will input 'node liri' into the terminal... plus one of these 4 possible second parameters:
+* The user will input 'node liri' into the terminal... plus one of these 4 possible parameters:
   * concert-this
     * this parameter requires an additional secondary artist/band name parameter
     * sample of this completed input would be: 'node liri concert-this grand funk'
@@ -13,11 +13,11 @@
     * without this additional secondary parameter, results for the song 'The Sign' by 'Ace of Bass' will be displayed
     * sample of this completed input would be: 'node liri spotify-this-song carouselambra'
   * do-what-it-says
-    * this parameter cause liri to ignore any additional parameters
-    * this full inout looks like: 'node liri do-what-it-says'
-    * this will read the file 'random.txt'... whose contents include one of the first 3 parameters, plus one of the additional ones
+    * this parameter causes liri to ignore any additional parameters
+    * this full input should be: 'node liri do-what-it-says'
+    * this will read the file 'random.txt'... whose contents include one of the first 3 parameters, plus one of the additional secondary ones
 
-* Upon entering this into the terminal, the following sequence of events will occur:
+* Upon entering the above input into the terminal, the following sequence of events will occur:
   * User validation will check that one of the 4 approved parameters has been entered
     * if one of the approved parameters hasn't been entered, an error message will be displayed listing the acceptable parameters
   * In the case of the first 3 acceptable parameters, a check for the secondary parameters will be made
