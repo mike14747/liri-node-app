@@ -409,3 +409,35 @@ Song Name: The Sign
 Spotify preview link: https://p.scdn.co/mp3-preview/4c463359f67dd3546db7294d236dd0ae991882ff?cid=4627d5c176074009b5f2c498caad6434
 Album Name: The Sign (US Album) [Remastered]
 
+
+-------------------------------------------------------
+Search Criteria and Results:
+-------------------------------------------------------
+
+No movie was found at OMDB matching your search criteria: 'blues borthers'
+
+
+-------------------------------------------------------
+Search Criteria and Results:
+-------------------------------------------------------
+
+Showing the first OMDB match for: 'blues brothers'.
+
+----------------------------------
+
+Title: The Blues Brothers
+
+Year of release is: 1980
+
+IMDB rating: 7.9/10
+
+Rotten Tomatoes rating: 83%
+
+Country of production: USA
+
+Language: English
+
+Movie plot: Jake Blues, just out from prison, puts together his old band to save the Catholic home where he and brother Elwood were raised.
+
+Actors: John Belushi, Dan Aykroyd, James Brown, Cab Calloway
+
